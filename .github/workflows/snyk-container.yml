@@ -22,9 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Build a Docker image
       run: docker build -t your/image-to-test .
+      
     - name: Run Snyk to check Docker image for vulnerabilities
       continue-on-error: true
       uses: snyk/actions/docker@master
@@ -34,7 +35,8 @@ jobs:
         image: your/image-to-test
         args: --file=Dockerfile
         
-    - name: Post process snyk sarif file
+    - name: Sarif file severity
+    # Se debe especiticar severidad para evitar errores en la generación de sarif file
       run: |
         sed -i 's/"security-severity": "null"/"security-severity": "0"/g' snyk.sarif
       
